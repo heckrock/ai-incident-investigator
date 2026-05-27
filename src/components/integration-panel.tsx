@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { ChevronDown, ExternalLink } from "lucide-react";
 import {
   Collapsible,
@@ -29,7 +30,7 @@ function Field({
 }: {
   id: string;
   label: string;
-  hint?: string;
+  hint?: ReactNode;
   children: React.ReactNode;
 }) {
   return (
