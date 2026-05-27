@@ -1,3 +1,4 @@
+import { getServerEnv } from "./server-env";
 import type { GrafanaConfig } from "./types";
 
 interface LokiResponse {
@@ -123,11 +124,11 @@ async function queryTempo(
 export async function fetchGrafanaIncidentContext(
   config: GrafanaConfig
 ): Promise<string> {
-  const baseUrl = (config.url || process.env.GRAFANA_URL || "").replace(
+  const baseUrl = (config.url || getServerEnv("GRAFANA_URL") || "").replace(
     /\/$/,
     ""
   );
-  const apiKey = config.apiKey || process.env.GRAFANA_API_KEY || "";
+  const apiKey = config.apiKey || getServerEnv("GRAFANA_API_KEY") || "";
 
   if (!baseUrl || !apiKey) {
     throw new Error(

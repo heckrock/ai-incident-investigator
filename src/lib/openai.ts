@@ -1,4 +1,5 @@
 import OpenAI from "openai";
+import { getOpenAIApiKey } from "./server-env";
 import type { IncidentAnalysis } from "./types";
 
 const SYSTEM_PROMPT = `You are an expert Site Reliability Engineer and incident investigator. Analyze the provided incident data and produce a structured post-incident analysis.
@@ -18,7 +19,7 @@ Be specific, actionable, and reference evidence from the incident data. Use prof
 export async function analyzeIncident(
   incidentContext: string
 ): Promise<IncidentAnalysis> {
-  const apiKey = process.env.OPENAI_API_KEY;
+  const apiKey = getOpenAIApiKey();
 
   if (!apiKey) {
     throw new Error(

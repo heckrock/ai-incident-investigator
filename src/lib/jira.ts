@@ -1,3 +1,4 @@
+import { getServerEnv } from "./server-env";
 import type { JiraConfig } from "./types";
 
 interface JiraComment {
@@ -40,12 +41,12 @@ function parseDescription(description: unknown): string {
 export async function fetchJiraIncidentContext(
   config: JiraConfig
 ): Promise<string> {
-  const baseUrl = (config.baseUrl || process.env.JIRA_BASE_URL || "").replace(
+  const baseUrl = (config.baseUrl || getServerEnv("JIRA_BASE_URL") || "").replace(
     /\/$/,
     ""
   );
-  const email = config.email || process.env.JIRA_EMAIL || "";
-  const apiToken = config.apiToken || process.env.JIRA_API_TOKEN || "";
+  const email = config.email || getServerEnv("JIRA_EMAIL") || "";
+  const apiToken = config.apiToken || getServerEnv("JIRA_API_TOKEN") || "";
 
   if (!baseUrl || !email || !apiToken || !config.issueKey) {
     throw new Error(
