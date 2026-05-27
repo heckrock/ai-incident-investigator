@@ -29,18 +29,35 @@ export async function analyzeIncident(
 
   const openai = new OpenAI({ apiKey });
 
-  const completion = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
-    temperature: 0.2,
-    response_format: { type: "json_object" },
-    messages: [
-      { role: "system", content: SYSTEM_PROMPT },
-      {
-        role: "user",
-        content: `Analyze the following incident data and produce a comprehensive post-incident report:\n\n${incidentContext}`,
-      },
-    ],
-  });
+  let completion;
+  try {
+    completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      temperature: 0.2,
+      response_format: { type: "json_object" },
+      messages: [
+        { role: "system", content: SYSTEM_PROMPT },
+        {
+          role: "user",
+          content: `Analyze the following incident data and produce a comprehensive post-incident report:\n\n${incidentContext}`,
+        },
+      ],
+    });
+  } catch (err) {
+    if (err instanceof OpenAI.APIError && err.status === 429) {
+      throw new Error(
+        "OpenAI quota exceeded. Add a payment method or credits at platform.openai.com/account/billing, then try again."
+      );
+    }
+
+    if (err instanceof OpenAI.APIError && err.status === 401) {
+      throw new Error(
+        "Invalid OpenAI API key. Check OPENAI_API_KEY in Render Environment variables."
+      );
+    }
+
+    throw err;
+  }
 
   const content = completion.choices[0]?.message?.content;
 
