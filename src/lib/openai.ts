@@ -22,7 +22,7 @@ export async function analyzeIncident(
 
   if (!apiKey) {
     throw new Error(
-      "OPENAI_API_KEY is not configured. Add it to your .env.local file."
+      "OPENAI_API_KEY is not configured. Add it to Render Environment variables (production) or .env.local (local development)."
     );
   }
 
