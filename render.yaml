@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: ai-incident-investigator
+    runtime: node
+    plan: starter
+    region: oregon
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NODE_ENV
+        value: production
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: JIRA_BASE_URL
+        sync: false
+      - key: JIRA_EMAIL
+        sync: false
+      - key: JIRA_API_TOKEN
+        sync: false
+      - key: GRAFANA_URL
+        sync: false
+      - key: GRAFANA_API_KEY
+        sync: false
